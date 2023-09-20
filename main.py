@@ -12,9 +12,11 @@ last_ask = {}
 
 load_dotenv()
 
+
 def save_users_to_json(user_data):
     with open("users.json", "w") as f:
         json.dump(user_data, f)
+
 
 def load_users_from_json():
     if os.path.exists("users.json"):
@@ -28,10 +30,12 @@ def save_words_to_json(leitner_box):
     for user, words in leitner_box.items():
         temp[user] = {}
         for word, step in words.items():
-            temp[user][word] = {"step": step["step"], "last_time": step["last_time"].timestamp()}
+            temp[user][word] = {"step": step["step"],
+                                "last_time": step["last_time"].timestamp()}
 
     with open("words.json", "w") as f:
         json.dump(temp, f)
+
 
 def load_words_from_json():
     try:
@@ -39,15 +43,19 @@ def load_words_from_json():
             json_data = json.load(f)
             for user, words in json_data.items():
                 for word, step in words.items():
-                    json_data[user][word]["last_time"] = datetime.fromtimestamp(step["last_time"])
+                    json_data[user][word]["last_time"] = datetime.fromtimestamp(
+                        step["last_time"])
             return json_data
     except FileNotFoundError:
         return {}
+
 
 # Leitner box to keep track of word state
 leitner_box = load_words_from_json()
 
 # Function to add a word
+
+
 def add_word(update: Update, context: CallbackContext):
     chat_type = update.message.chat.type
     if chat_type != 'private':
@@ -56,8 +64,9 @@ def add_word(update: Update, context: CallbackContext):
     word = update.message.text.split(' ')[1]
     update.message.reply_text(f"Do you want to learn the word '{word}'?", reply_markup=InlineKeyboardMarkup([
         [InlineKeyboardButton("Yes", callback_data=f'add_{word}'),
-        InlineKeyboardButton("No", callback_data='cancel')]
+         InlineKeyboardButton("No", callback_data='cancel')]
     ]))
+
 
 def button(update: Update, context: CallbackContext):
     user_id = str(update.callback_query.from_user.id)
@@ -67,13 +76,16 @@ def button(update: Update, context: CallbackContext):
 
     if action == 'add':
         if leitner_box[user_id].get(word) is None:
-            leitner_box[user_id][word] = {"step": 0, "last_time": datetime.now()}  # Initial step
+            leitner_box[user_id][word] = {
+                "step": 0, "last_time": datetime.now()}  # Initial step
             save_words_to_json(leitner_box)
         query.edit_message_text(f"Added word '{word}' to learn.")
     else:
         query.edit_message_text("Cancelled.")
 
 # Function to check and ask words based on Leitner system
+
+
 def check_words(context: CallbackContext):
     for user, words in leitner_box.items():
         for word, step in words.items():
@@ -87,6 +99,7 @@ def check_words(context: CallbackContext):
                 question = f"Use the word '{word}' in a sentence."
                 context.bot.send_message(chat_id=user, text=question)
                 last_ask[user][word] = datetime.now()
+
 
 def should_ask(step):
     # Implement your Leitner timing logic here
@@ -117,7 +130,6 @@ def handle_message(update: Update, context: CallbackContext):
         answer = new_chat.ask(question_text.format(word, user_reply))
         new_chat.save(f"{user_id}_{word}")
 
-
         regex = r"(\d+\/\d+)"
         matches = re.findall(regex, answer)
         if matches:
@@ -128,7 +140,8 @@ def handle_message(update: Update, context: CallbackContext):
                 leitner_box[user_id][word]['step'] += 1
                 leitner_box[user_id][word]['last_time'] = datetime.now()
                 save_words_to_json(leitner_box)
-                message.reply_text(f"Correct! You can now move on to the next step.")
+                message.reply_text(
+                    f"Correct! You can now move on to the next step.")
             else:
                 message.reply_text(f"Your score is too low. Try again.")
 
@@ -144,14 +157,14 @@ def start(update: Update, context: CallbackContext):
 
     user_id = str(update.message.from_user.id)
     welcome_message = (
-            f"Welcome to the English Learning Bot! Your user ID is {user_id}.\n\n"
-            "Here's how this bot works:\n"
-            "- Use /addword [word] to add a new word you want to learn.\n"
-            "- The bot will save your words and periodically quiz you based on the Leitner system.\n"
-            "- When it's time to review a word, the bot will ask you a question requiring you to use that word in a sentence.\n"
-            "- Reply to the question and the bot will grade your answer. If you score above 80%, the word moves to the next Leitner box. If not, it goes back to the beginning.\n\n"
-            "Let's get started! Use /addword [word] to add your first word."
-        )
+        f"Welcome to the English Learning Bot! Your user ID is {user_id}.\n\n"
+        "Here's how this bot works:\n"
+        "- Use /addword [word] to add a new word you want to learn.\n"
+        "- The bot will save your words and periodically quiz you based on the Leitner system.\n"
+        "- When it's time to review a word, the bot will ask you a question requiring you to use that word in a sentence.\n"
+        "- Reply to the question and the bot will grade your answer. If you score above 80%, the word moves to the next Leitner box. If not, it goes back to the beginning.\n\n"
+        "Let's get started! Use /addword [word] to add your first word."
+    )
     update.message.reply_text(welcome_message)
     leitner_box[user_id] = {}
     save_words_to_json(leitner_box)
@@ -178,6 +191,7 @@ def start(update: Update, context: CallbackContext):
 
         save_users_to_json(user_data)
 
+
 def status(update: Update, context: CallbackContext):
     chat_type = update.message.chat.type
     if chat_type != 'private':
@@ -192,6 +206,7 @@ def status(update: Update, context: CallbackContext):
 
     update.message.reply_text(message)
 
+
 def main():
     updater = Updater(token=os.getenv("TELEGRAM_TOKEN"), use_context=True)
     dp = updater.dispatcher
@@ -200,14 +215,17 @@ def main():
     dp.add_handler(CommandHandler('status', status))
     dp.add_handler(CommandHandler('addword', add_word))
     dp.add_handler(CallbackQueryHandler(button))
-    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))
+    dp.add_handler(MessageHandler(Filters.text & ~
+                   Filters.command, handle_message))
 
     # Check words based on Leitner system
     job_queue = updater.job_queue
-    job_queue.run_repeating(check_words, interval=5, first=0, context=os.getenv('USER_ID'))
+    job_queue.run_repeating(check_words, interval=5,
+                            first=0, context=os.getenv('USER_ID'))
 
     updater.start_polling()
     updater.idle()
+
 
 if __name__ == '__main__':
     main()

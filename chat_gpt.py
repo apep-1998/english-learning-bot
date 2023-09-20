@@ -26,6 +26,7 @@ My sentence is :
 openai.api_key = os.getenv("CHAT_GPT_TOKEN")
 chats = {}
 
+
 class Chat(object):
 
     def __init__(self):

@@ -22,12 +22,12 @@ This Telegram bot aims to help users improve their English vocabulary. The bot s
 
 1. Clone the repository
    \`\`\`
-   git clone https://github.com/yourusername/english-learning-telegram-bot.git
+   git clone https://github.com/apep-1998/english-learning-bot.git
    \`\`\`
 
 2. Navigate to the project directory
    \`\`\`
-   cd english-learning-telegram-bot
+   cd english-learning-bot
    \`\`\`
 
 3. Install the required packages
@@ -40,7 +40,8 @@ This Telegram bot aims to help users improve their English vocabulary. The bot s
 1. Create a new bot on Telegram's BotFather and get the API token.
 2. Add the API token to a \`.env\` file like this:
    \`\`\`
-   TELEGRAM_API_TOKEN=your_token_here
+   CHAT_GPT_TOKEN="TOKEN"
+   TELEGRAM_TOKEN="TOKEN"
    \`\`\`
 
 3. Run the bot
