@@ -21,39 +21,42 @@ This Telegram bot aims to help users improve their English vocabulary. The bot s
 ### Installation
 
 1. Clone the repository
-   \`\`\`
+
+   ```
    git clone https://github.com/apep-1998/english-learning-bot.git
-   \`\`\`
+   ```
 
 2. Navigate to the project directory
-   \`\`\`
+
+   ```
    cd english-learning-bot
-   \`\`\`
+   ```
 
 3. Install the required packages
-   \`\`\`
+   ```
    pip install -r requirements.txt
-   \`\`\`
+   ```
 
 ### Usage
 
 1. Create a new bot on Telegram's BotFather and get the API token.
-2. Add the API token to a \`.env\` file like this:
-   \`\`\`
+2. Add the API token to a `.env` file like this:
+
+   ```
    CHAT_GPT_TOKEN="TOKEN"
    TELEGRAM_TOKEN="TOKEN"
-   \`\`\`
+   ```
 
 3. Run the bot
-   \`\`\`
+   ```
    python main.py
-   \`\`\`
+   ```
 
 ## Code Structure
 
-- \`main.py\`: The main script to run the bot
-- \`users.json\`: Stores user data in JSON format
-- \`/pictures\`: Directory to store user profile pictures
+- `main.py`: The main script to run the bot
+- `users.json`: Stores user data in JSON format
+- `/pictures`: Directory to store user profile pictures
 
 ## Contributing
 
