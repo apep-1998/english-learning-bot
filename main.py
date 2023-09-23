@@ -68,6 +68,23 @@ def add_word(update: Update, context: CallbackContext):
     ]))
 
 
+def list_words(update: Update, context: CallbackContext):
+    user_id = str(update.message.from_user.id)
+    user_data = load_users_from_json()  # Load user data
+
+    if user_id in user_data:
+        words = user_data[user_id]
+
+        keyboard = []
+        for word in words.keys():
+            keyboard.append([InlineKeyboardButton(word, callback_data=f"reset_{word}")])
+
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        update.message.reply_text("Words to learn:", reply_markup=reply_markup)
+    else:
+        update.message.reply_text("No user data found.")
+
+
 def button(update: Update, context: CallbackContext):
     user_id = str(update.callback_query.from_user.id)
     query = update.callback_query
@@ -83,6 +100,11 @@ def button(update: Update, context: CallbackContext):
         examples = chat.ask(example_text.format(word))
         chat.save(f"{user_id}_{word}_example")
         query.edit_message_text(f"Added word '{word}' to learn.\n{examples}")
+    elif action == "reset":
+        if word in leitner_box[user_id].keys():
+            leitner_box[user_id][word]['step'] = 1  # Reset step
+            query.edit_message_text(f"Reset step for word: {word}")
+            save_words_to_json(leitner_box)
     else:
         query.edit_message_text("Cancelled.")
 
@@ -217,6 +239,7 @@ def main():
 
     dp.add_handler(CommandHandler('start', start))
     dp.add_handler(CommandHandler('status', status))
+    dp.add_handler(CommandHandler('listwords', list_words))
     dp.add_handler(CommandHandler('addword', add_word))
     dp.add_handler(CallbackQueryHandler(button))
     dp.add_handler(MessageHandler(Filters.text & ~
