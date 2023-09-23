@@ -78,7 +78,7 @@ def list_words(update: Update, context: CallbackContext):
         keyboard = []
         for word in words.keys():
             keyboard.append([
-                InlineKeyboardButton(f"{word} - {words[word]}", callback_data=f"reset_{word}"),
+                InlineKeyboardButton(f"{word} - {words[word]['step']}", callback_data=f"reset_{word}"),
                 InlineKeyboardButton("Delete", callback_data=f"delete_{word}")
                 ])
 
