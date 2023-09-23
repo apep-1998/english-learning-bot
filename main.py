@@ -93,8 +93,9 @@ def check_words(context: CallbackContext):
     for user, words in leitner_box.items():
         for word, step in words.items():
             # Logic for Leitner system timing and step
-            if last_ask.get(user, {}).get(word) is None:
-                last_ask[user] = {}
+            if last_ask.get(user) is None and last_ask[user].get(word) is None:
+                if last_ask.get(user) is None:
+                    last_ask[user] = {}
                 last_ask[user][word] = datetime.now() - timedelta(hours=3)
 
             if should_ask(step) and last_ask[user][word] + timedelta(hours=2) < datetime.now():
