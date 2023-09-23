@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import json
 import os
 from dotenv import load_dotenv
-from chat_gpt import Chat, question_text
+from chat_gpt import Chat, question_text, example_text
 import re
 
 
@@ -79,7 +79,10 @@ def button(update: Update, context: CallbackContext):
             leitner_box[user_id][word] = {
                 "step": 0, "last_time": datetime.now()}  # Initial step
             save_words_to_json(leitner_box)
-        query.edit_message_text(f"Added word '{word}' to learn.")
+        chat = Chat()
+        examples = chat.ask(example_text.format(word))
+        chat.save(f"{user_id}_{word}_example")
+        query.edit_message_text(f"Added word '{word}' to learn.\n{examples}")
     else:
         query.edit_message_text("Cancelled.")
 

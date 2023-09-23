@@ -11,15 +11,24 @@ You are my English teacher.
 Now I want to learn the word "{}".
 So I am trying to make a sentence with it.
 
-Check my sentence and give me a score.
+Check my sentence and give me a score out of 10 like this 8/10
 
 If I have grammar issues or any English issues in my sentence fix it and explain it to me.
-
-Also give the score out of 10 and write it like this : 8/10
 
 My sentence is :
 
 {}
+"""
+
+example_text = """
+You are my English teacher
+I have the '{}' word and I want the following information about it.
+I need this information for the root of the word so explain the root of the word and after explain the following things.
+1. explain the word's meaning in easy English words.
+2. list the word different types of the root (verb, adj, adv and etc) and explain the meaning there.
+3. for each type make 5 example in a sentence.
+3. for each type give me a score out of 10 on how often use in normal life.
+3. if it is a verb give me the 3 different times of the verb
 """
 
 
