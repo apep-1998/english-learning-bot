@@ -77,7 +77,10 @@ def list_words(update: Update, context: CallbackContext):
 
         keyboard = []
         for word in words.keys():
-            keyboard.append([InlineKeyboardButton(word, callback_data=f"reset_{word}")])
+            keyboard.append([
+                InlineKeyboardButton(f"{word} - {words[word]}", callback_data=f"reset_{word}"),
+                InlineKeyboardButton("Delete", callback_data=f"delete_{word}")
+                ])
 
         reply_markup = InlineKeyboardMarkup(keyboard)
         update.message.reply_text("Words to learn:", reply_markup=reply_markup)
@@ -103,8 +106,13 @@ def button(update: Update, context: CallbackContext):
     elif action == "reset":
         if word in leitner_box[user_id].keys():
             leitner_box[user_id][word]['step'] = 1  # Reset step
-            query.edit_message_text(f"Reset step for word: {word}")
             save_words_to_json(leitner_box)
+            query.edit_message_text(f"Reset step for word: {word}")
+    elif action == "delete":
+        if word in leitner_box[user_id].keys():
+            del leitner_box[user_id][word]
+            save_words_to_json(leitner_box)
+            query.edit_message_text(f"Deleted word: {word}")
     else:
         query.edit_message_text("Cancelled.")
 
