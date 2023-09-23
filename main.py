@@ -75,10 +75,19 @@ def list_words(update: Update, context: CallbackContext):
     if user_id in user_data:
         words = leitner_box[user_id]
 
-        keyboard = []
+        keyboard = [
+            [
+                InlineKeyboardButton("Word", callback_data=f"_"),
+                InlineKeyboardButton("Step", callback_data=f"_"),
+                InlineKeyboardButton("Reset" , callback_data=f"_"),
+                InlineKeyboardButton("Delete", callback_data=f"_")
+            ]
+        ]
         for word in words.keys():
             keyboard.append([
-                InlineKeyboardButton(f"{word} - {words[word]['step']}", callback_data=f"reset_{word}"),
+                InlineKeyboardButton(f"{word}", callback_data=f"_"),
+                InlineKeyboardButton(f"{words[word]['step']}", callback_data=f"_"),
+                InlineKeyboardButton("Reset", callback_data=f"reset_{word}"),
                 InlineKeyboardButton("Delete", callback_data=f"delete_{word}")
                 ])
 
@@ -113,8 +122,6 @@ def button(update: Update, context: CallbackContext):
             del leitner_box[user_id][word]
             save_words_to_json(leitner_box)
             query.edit_message_text(f"Deleted word: {word}")
-    else:
-        query.edit_message_text("Cancelled.")
 
 # Function to check and ask words based on Leitner system
 
@@ -137,6 +144,8 @@ def check_words(context: CallbackContext):
 
 def should_ask(step):
     # Implement your Leitner timing logic here
+    if step['step'] >= 6:
+        return False
     if step["step"] == 0:
         return True
     elif step['last_time'] + timedelta(days=step['step']) < datetime.now():
