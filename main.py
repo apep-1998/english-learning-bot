@@ -73,7 +73,7 @@ def list_words(update: Update, context: CallbackContext):
     user_data = load_users_from_json()  # Load user data
 
     if user_id in user_data:
-        words = user_data[user_id]
+        words = leitner_box[user_id]
 
         keyboard = []
         for word in words.keys():
