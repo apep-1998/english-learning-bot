@@ -93,12 +93,12 @@ def check_words(context: CallbackContext):
     for user, words in leitner_box.items():
         for word, step in words.items():
             # Logic for Leitner system timing and step
-            if last_ask.get(user) is None and last_ask[user].get(word) is None:
+            if last_ask.get(user) is None or last_ask[user].get(word) is None:
                 if last_ask.get(user) is None:
                     last_ask[user] = {}
-                last_ask[user][word] = datetime.now() - timedelta(hours=3)
+                last_ask[user][word] = datetime.now() - timedelta(hours=6)
 
-            if should_ask(step) and last_ask[user][word] + timedelta(hours=2) < datetime.now():
+            if should_ask(step) and last_ask[user][word] + timedelta(hours=5) < datetime.now():
                 # Create a question with GPT (replace this with real GPT logic)
                 question = f"Use the word '{word}' in a sentence."
                 context.bot.send_message(chat_id=user, text=question)
