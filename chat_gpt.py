@@ -26,14 +26,6 @@ I have the '{}' word and I want the following information about it.
 I need this information for the root of the word so explain the root of the word and after explain the following things.
 1. explain the word's meaning in easy English words.
 2. give each of following type of the root word with 5 example for each of them and score out of 10 on how often use in normal life:
-2-1 NOUN.
-2-2 VERB.
-2-3 ADJECTIVE.
-2-4 ADVERB.
-2-5 PRONOUN.
-2-6 PREPOSITION.
-2-7 CONJUNCTION.
-2-8 INTERJECTION.
 """
 
 
