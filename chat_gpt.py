@@ -23,9 +23,8 @@ My sentence is :
 example_text = """
 You are my English teacher
 I have the '{}' word and I want the following information about it.
-I need this information for the root of the word so explain the root of the word and after explain the following things.
 1. explain the word's meaning in easy English words.
-2. give each of following type of the root word with 5 example for each of them and score out of 10 on how often use in normal life:
+2. give me 5 example sentences with the word.
 """
 
 
